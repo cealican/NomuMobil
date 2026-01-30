@@ -52,7 +52,10 @@ data class RecipeRecommendation(
 data class RecipeSummary(
     val name: String,
     val time: String,
-    val difficulty: String
+    val difficulty: String,
+    val calories: String,    // Örn: "450 kcal"
+    val protein: String,     // Örn: "25g"
+    val carbs: String        // Örn: "15g"
 )
 
 @Serializable

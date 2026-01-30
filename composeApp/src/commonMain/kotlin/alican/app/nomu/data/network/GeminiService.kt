@@ -55,77 +55,46 @@ class GeminiService {
     }
 
     suspend fun getRecipes(ingredients: String, location: String, lang: String): RecipeRecommendation {
-        // Dil kontrolüne göre sistem talimatını belirliyoruz
-        val languageInstruction = if (lang == "en") {
-            "You MUST respond in ENGLISH language only."
-        } else {
-            "Yanıtları sadece TÜRKÇE dilinde ver."
+        val targetLang = when(lang) {
+            "tr" -> "Turkish"
+            "es" -> "Spanish"
+            "fr" -> "French"
+            "de" -> "German"
+            "ar" -> "Arabic"
+            "zh" -> "Chinese"
+            "hi" -> "Hindi"
+            else -> "English"
         }
 
-
-
         val prompt = """
-            ROLE: You are an expert global chef.
-
-            STRICT RULE 1: First, translate all provided INGREDIENTS and LOCATION into English.
-            STRICT RULE 2: Based on the translated information, suggest 3 dishes.
-            STRICT RULE 3: You MUST respond in ENGLISH language only. All values in the JSON must be in English.
-            STRICT RULE: $languageInstruction
-            
-            TASK: Suggest 3 popular dishes based on the following:
-            INGREDIENTS: $ingredients
-            LOCATION: $location
+            ROL: Sen dünya çapında uzman bir şefsin.
         
-            OUTPUT FORMAT: Provide ONLY a raw JSON object. No preamble, no markdown blocks, no extra text.
-
-            JSON SCHEMA: 
+            KESİN KURAL: Tüm yanıt içeriği KESİNSİZ OLARAK $targetLang dilinde olmalıdır. 
+            Girdiler başka dilde olsa bile sen sadece $targetLang dilinde sonuç üreteceksin.
+            
+            GÖREV: Aşağıdaki malzemelere ve konuma göre 3 popüler yemek önerisi yap.
+            MALZEMELER: $ingredients
+            KONUM: $location
+            
+            ÇIKTI FORMATI: Sadece ham JSON objesi döndür. Markdown (```json) kullanma. Başka açıklama ekleme.
+            
+            JSON ŞABLONU:
             {
-              "recipes": [
-                {
-                  "name": "Name of the dish (In English)",
-                  "time": "Estimated time",
-                  "difficulty": "Easy/Medium/Hard"
-                }
-              ]
+                "recipes": [
+                    {
+                        "name": "Yemeğin $targetLang dilindeki adı",
+                        "time": "Tahmini süre",
+                            "difficulty": "Zorluk",
+                            "calories": "Kalori (Örn: 400 kcal)",
+                            "protein": "Protein (Örn: 20g)",
+                            "carbs": "Karbonhidrat (Örn: 30g)"
+                    }
+                ]
             }
         """.trimIndent()
 
-       /* val prompt = """
-        ROLE: You are an expert global chef.
-        STRICT RULE: $languageInstruction
-        
-        TASK: Suggest 3 popular dishes based on the following:
-        INGREDIENTS: $ingredients
-        LOCATION: $location
-        
-        OUTPUT FORMAT: Provide ONLY a raw JSON object. No preamble, no markdown blocks, no extra text.
-        
-        JSON SCHEMA: 
-        {
-          "recipes": [
-            {
-              "name": "Name of the dish",
-              "time": "Estimated time",
-              "difficulty": "Easy/Medium/Hard"
-            }
-          ]
-        }
-    """.trimIndent()*/
-
         val responseText = makeGeminiCall(prompt)
-    /*
-        // Prompt'u daha otoriter ve net hale getirdik
-        val prompt = """
-        Sen bir şefsin. Yanıtları ${if(lang == "en") "English" else "Turkish"} dilinde ver.
-        GÖREV: Kullanıcıya yemek önerisi yap.
-        MALZEMELER: $ingredients
-        LOKASYON: $location
-        FORMAT: Sadece JSON döndür. Başka hiçbir açıklama metni ekleme.
-        JSON ŞABLONU: {"recipes": [{"name": "Yemek Adı", "time": "30 dk", "difficulty": "Kolay"}]}
-    """.trimIndent()
 
-        val responseText = makeGeminiCall(prompt)
-*/
         // Markdown bloklarını temizlemek için daha güçlü bir temizleyici
         val cleanJson = responseText
             .replace(Regex("```json"), "")
@@ -135,22 +104,29 @@ class GeminiService {
         return Json { ignoreUnknownKeys = true }.decodeFromString(cleanJson)
     }
 
-    suspend fun getRecipeDetail(recipeName: String, lang: String): RecipeDetail {
-
-        val languageInstruction = if (lang == "en") {
-            "You MUST respond in ENGLISH language only."
-        } else {
-            "Yanıtları sadece TÜRKÇE dilinde ver."
+    suspend fun getRecipeDetail(recipeName: String, location: String, lang: String): RecipeDetail {
+        val targetLang = when(lang) {
+            "tr" -> "Turkish"
+            "es" -> "Spanish"
+            "fr" -> "French"
+            "de" -> "German"
+            "ar" -> "Arabic"
+            "zh" -> "Chinese"
+            "hi" -> "Hindi"
+            else -> "English"
         }
 
         val prompt = """
+            ROL: Sen dünya çapında uzman bir şefsin.
+        
+            KESİN KURAL: Tüm yanıt içeriği KESİNSİZ OLARAK $targetLang dilinde olmalıdır. 
+            Girdiler başka dilde olsa bile sen sadece $targetLang dilinde sonuç üreteceksin.
             
-            ROLE: You are an expert global chef.
-
-            STRICT RULE 3: You MUST respond in ENGLISH language only. All values in the JSON must be in English.
-            STRICT RULE: $languageInstruction
+            GÖREV: $location konumuna ait $recipeName yemeği için tarifi şu JSON formatında ver: {\"name\": \"$recipeName\", \"ingredients\": [\"madde1\"], \"steps\": [\"adım1\"]}
             
-            $recipeName yemeği için tarifi şu JSON formatında ver: {\"name\": \"$recipeName\", \"ingredients\": [\"madde1\"], \"steps\": [\"adım1\"]}""".trimIndent()
+            ÇIKTI FORMATI: Sadece ham JSON objesi döndür. Markdown (```json) kullanma. Başka açıklama ekleme.
+            
+        """.trimIndent()
 
         val responseText = makeGeminiCall(prompt)
         val cleanJson = cleanJson(responseText)

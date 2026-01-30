@@ -10,10 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import alican.app.nomu.ui.HomeViewModel
+import alican.app.nomu.ui.LanguagePicker
 import alican.app.nomu.ui.UiState
 import alican.app.nomu.util.AppStrings
 import alican.app.nomu.util.SettingsManager
 import alican.app.nomu.util.getStrings
+import alican.app.nomu.util.languages
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -28,6 +30,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.ui.text.font.FontWeight
+import nomu.composeapp.generated.resources.Res
 
 @Composable
 fun App() {
@@ -51,15 +54,15 @@ fun App() {
                     is UiState.Idle -> InputScreen(
                         strings = strings, // Dil dosyasına göre metinleri gönder
                         onSearch = { ing, loc ->
-                            // ViewModel'e dili de parametre olarak geçiyoruz
                             viewModel.findRecipes(ing, loc, currentLang)
                         }
                     )
 
                     is UiState.Loading -> LoadingScreen()
                     is UiState.SuccessList -> RecipeListScreen(
+                        loc = "Türkiye", // TODO: dışarıdan alınacak
                         recipes = currentState.data.recipes,
-                        onRecipeClick = { name -> viewModel.getRecipeDetails(name, currentLang) },
+                        onRecipeClick = { name, loc -> viewModel.getRecipeDetails(name, loc, currentLang) },
                         onBack = { viewModel.resetToHome() }
                     )
 
@@ -84,32 +87,12 @@ fun App() {
 
 // --- Alt Ekran Bileşenleri ---
 @Composable
-fun LanguagePicker(currentLang: String, onLangSelected: (String) -> Unit) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(modifier = Modifier.fillMaxWidth().padding(8.dp), contentAlignment = Alignment.TopEnd) {
-        IconButton(onClick = { expanded = true }) {
-            Icon(Icons.Default.Language, contentDescription = "Dil")
-        }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            DropdownMenuItem(
-                text = { Text("Türkçe 🇹🇷") },
-                onClick = { onLangSelected("tr"); expanded = false }
-            )
-            DropdownMenuItem(
-                text = { Text("English 🇺🇸") },
-                onClick = { onLangSelected("en"); expanded = false }
-            )
-        }
-    }
-}
-@Composable
 fun InputScreen(
     strings: AppStrings, // Dil desteği için ekledik
     onSearch: (String, String) -> Unit
 ) {
-    var ingredients by remember { mutableStateOf("Kıyma, Domates, Patlıcan") }
-    var location by remember { mutableStateOf("Türkiye") }
+    var ingredients by remember { mutableStateOf("Kıyma, Domates, Patlıcan") } // TODO: temizlenecek
+    var location by remember { mutableStateOf("Türkiye") } // TODO: temizlenecek
 
     // Tasarımı merkezlemek ve şıklaştırmak için Column yapısı
     Column(
@@ -196,8 +179,9 @@ fun InputScreen(
 }
 @Composable
 fun RecipeListScreen(
+    loc: String,
     recipes: List<alican.app.nomu.data.model.RecipeSummary>,
-    onRecipeClick: (String) -> Unit,
+    onRecipeClick: (String, String) -> Unit,
     onBack: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
@@ -209,22 +193,44 @@ fun RecipeListScreen(
         LazyColumn {
             items(recipes) { recipe ->
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .clickable { onRecipeClick(recipe.name) },
-                    elevation = CardDefaults.cardElevation(4.dp)
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).clickable { onRecipeClick(recipe.name, loc) },
+                    elevation = CardDefaults.cardElevation(4.dp),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text(recipe.name, style = MaterialTheme.typography.titleMedium)
-                        Text("Süre: ${recipe.time} • Zorluk: ${recipe.difficulty}")
+                        Text(recipe.name, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+
+                        Row(modifier = Modifier.padding(vertical = 4.dp)) {
+                            SuggestionChip(onClick = {}, label = { Text(recipe.time) })
+                            Spacer(modifier = Modifier.width(8.dp))
+                            SuggestionChip(onClick = {}, label = { Text(recipe.difficulty) })
+                        }
+
+                        Divider(modifier = Modifier.padding(vertical = 8.dp))
+
+                        // Besin Değerleri Satırı
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            NutrientInfo(label = "🔥", value = recipe.calories)
+                            NutrientInfo(label = "🥩", value = recipe.protein)
+                            NutrientInfo(label = "🍞", value = recipe.carbs)
+                        }
                     }
                 }
             }
         }
     }
 }
-
+// Yardımcı bileşen
+@Composable
+fun NutrientInfo(label: String, value: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(text = label, style = MaterialTheme.typography.bodySmall)
+        Text(text = value, style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+    }
+}
 @Composable
 fun RecipeDetailScreen(
     detail: alican.app.nomu.data.model.RecipeDetail,

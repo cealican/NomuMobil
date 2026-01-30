@@ -9,6 +9,9 @@ import kotlinx.coroutines.launch
 import alican.app.nomu.data.model.RecipeDetail
 import alican.app.nomu.data.model.RecipeRecommendation
 import alican.app.nomu.data.network.GeminiService
+import alican.app.nomu.data.network.getMockRecipeDetail
+import alican.app.nomu.data.network.getMockRecipes
+import alican.app.nomu.util.isMock
 
 sealed class UiState {
     data object Idle : UiState()
@@ -29,8 +32,8 @@ class HomeViewModel {
         _uiState.value = UiState.Loading
         scope.launch {
             try {
-                // Service'e lang parametresini ekledik
-                val result = service.getRecipes(ingredients, location, lang)
+                val result = if (isMock) getMockRecipes(lang) else service.getRecipes(ingredients, location, lang)
+
                 _uiState.value = UiState.SuccessList(result)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e.message ?: "Error")
@@ -38,11 +41,11 @@ class HomeViewModel {
         }
     }
 
-    fun getRecipeDetails(recipeName: String, lang: String) {
+    fun getRecipeDetails(recipeName: String, location: String,  lang: String) {
         _uiState.value = UiState.Loading
         scope.launch {
             try {
-                val result = service.getRecipeDetail(recipeName, lang)
+                val result = if (isMock) getMockRecipeDetail(recipeName, lang) else service.getRecipeDetail(recipeName, location, lang)
                 _uiState.value = UiState.SuccessDetail(result)
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e.message ?: "Detay alınamadı")
