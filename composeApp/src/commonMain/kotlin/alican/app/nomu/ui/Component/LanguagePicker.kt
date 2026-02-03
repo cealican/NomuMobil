@@ -1,4 +1,4 @@
-package alican.app.nomu.ui
+package alican.app.nomu.ui.Component
 
 import alican.app.nomu.util.languages
 import androidx.compose.foundation.layout.Box
