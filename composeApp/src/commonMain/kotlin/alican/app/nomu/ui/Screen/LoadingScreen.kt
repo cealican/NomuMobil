@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 fun LoadingScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
+
+        // todo metni stringten al
         Text("Nomu Şefi Düşünüyor...", modifier = Modifier.padding(top = 64.dp))
     }
 }

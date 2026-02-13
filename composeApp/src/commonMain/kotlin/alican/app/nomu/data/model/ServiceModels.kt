@@ -1,10 +1,10 @@
 package alican.app.nomu.data.model
 
+
 import kotlinx.serialization.Serializable
 
-// --- Gemini API Request Models ---
 @Serializable
-data class GeminiRequest(
+data class ServiceRequest(
     val contents: List<Content>,
     val safetySettings: List<SafetySetting> = listOf(
         SafetySetting("HARM_CATEGORY_HARASSMENT", "BLOCK_NONE"),
@@ -13,7 +13,7 @@ data class GeminiRequest(
         SafetySetting("HARM_CATEGORY_DANGEROUS_CONTENT", "BLOCK_NONE")
     )
 )
-/*
+
 @Serializable
 data class SafetySetting(
     val category: String,
@@ -29,10 +29,10 @@ data class Content(
 data class Part(
     val text: String
 )
-*/
+/*
 // --- Gemini API Response Models ---
 @Serializable
-data class GeminiResponse(
+data class ServiceResponse(
     val candidates: List<Candidate>? = null
 )
 
@@ -40,9 +40,11 @@ data class GeminiResponse(
 data class Candidate(
     val content: Content,
     val finishReason: String? = null
-)
+)*/
 
 // --- Uygulama İçi Modeller (Domain Models) ---
+
+/*
 @Serializable
 data class RecipeRecommendation(
     val recipes: List<RecipeSummary>
@@ -63,4 +65,4 @@ data class RecipeDetail(
     val name: String,
     val ingredients: List<String>,
     val steps: List<String>
-)
+)*/

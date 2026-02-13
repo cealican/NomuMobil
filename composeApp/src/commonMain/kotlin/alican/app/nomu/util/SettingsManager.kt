@@ -12,9 +12,10 @@ class SettingsManager {
 
     fun setLanguage(langCode: String) {
         settings.putString(SELECTED_LANGUAGE, langCode)
+        selectedLanguage = langCode
     }
 
     fun getLanguage(): String {
-        return settings.getString(SELECTED_LANGUAGE, "tr") // Varsayılan Türkçe
+        return settings.getString(SELECTED_LANGUAGE, "en") // Varsayılan Türkçe
     }
 }

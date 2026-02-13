@@ -1,6 +1,24 @@
 package alican.app.nomu.util
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+
 val isMock = true
+var token = "bismillah"
+var selectedLanguage: String = SettingsManager().getLanguage()
+    get() {
+        field = SettingsManager().getLanguage()
+        return field
+    }
+    set(value) {
+        field = value
+    }
+
+//val appStrings: AppStrings = getStrings(selectedLanguage)
+
 
 // TODO: web tarafında loglayarak tüm işlemler yapılacak.
 

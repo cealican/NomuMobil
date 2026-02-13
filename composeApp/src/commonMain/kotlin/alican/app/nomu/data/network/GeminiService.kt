@@ -18,7 +18,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-
+/*
 class GeminiService {
     private val apiKey = "AIzaSyAFgIa0OivQYAQam1Lw8UxD2vPM02I_cwU"
 
@@ -167,3 +167,4 @@ class GeminiService {
         return input.replace("```json", "").replace("```", "").trim()
     }
 }
+*/

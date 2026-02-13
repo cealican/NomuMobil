@@ -20,21 +20,19 @@ import androidx.compose.ui.unit.dp
 fun LanguagePicker(currentLang: String, onLangSelected: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
-    // Her dilin kendi ana dilindeki adı (Endonym)
     val languageNames = mapOf(
-        "tr" to "🇹🇷 Türkçe",
-        "en" to "🇺🇸 English",
-        "es" to "🇪🇸 Español",
-        "fr" to "🇫🇷 Français",
-        "de" to "🇩🇪 Deutsch",
-        "ar" to "🇸🇦 العربية",
-        "zh" to "🇨🇳 中文",
-        "hi" to "🇮🇳 हिन्दी"
+        "tr" to "Türkçe 🇹🇷",
+        "en" to "English 🇺🇸",
+        "es" to "Español 🇪🇸",
+        "fr" to "Français 🇫🇷",
+        "de" to "Deutsch 🇩🇪",
+        "ar" to "العربية 🇸🇦",
+        "zh" to "中文 🇨🇳",
+        "hi" to "हिन्दी 🇮🇳"
     )
 
     Box(modifier = Modifier.padding(16.dp)) {
         TextButton(onClick = { expanded = true }) {
-            // Seçili dili kendi adıyla gösterir
             Text(languageNames[currentLang] ?: "🌐 Language")
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {

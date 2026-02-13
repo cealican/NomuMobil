@@ -1,5 +1,6 @@
 package alican.app.nomu.ui.ViewModel
 
+import alican.app.nomu.data.model.Category
 import alican.app.nomu.data.network.Service
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -11,12 +12,12 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val service: Service) : ViewModel() {
     // UI State'leri
-    var categories by mutableStateOf<List<String>>(emptyList())
+    var categories by mutableStateOf<List<Category>>(emptyList())
     var locationSuggestions by mutableStateOf<List<String>>(emptyList())
     var ingredientSuggestions by mutableStateOf<List<String>>(emptyList())
 
     // Kullanıcı Seçimleri
-    var selectedCategory by mutableStateOf("")
+    var selectedCategory by mutableStateOf<Category?>(null)
     var selectedLocation by mutableStateOf("")
     val selectedIngredients = mutableStateListOf<String>()
 
@@ -26,7 +27,7 @@ class HomeViewModel(private val service: Service) : ViewModel() {
 
     private fun loadCategories() {
         viewModelScope.launch {
-            categories = service.fetchCategories() // Servisten kategorileri çek
+            service.fetchCategories()?.let { categories = it }
         }
     }
 
