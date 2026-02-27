@@ -1,5 +1,6 @@
 package alican.app.nomu.ui.Component
 
+import alican.app.nomu.data.model.Language
 import alican.app.nomu.util.languages
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -15,11 +16,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-
 @Composable
-fun LanguagePicker(currentLang: String, onLangSelected: (String) -> Unit) {
+fun LanguagePicker(currentLangId: Int, onLangSelected: (Int) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
+    val languageList = listOf(
+        Language(1, "tr", "Türkçe 🇹🇷"),
+        Language(2, "en", "English 🇺🇸"),
+        Language(3, "es", "Español 🇪🇸"),
+        Language(4, "fr", "Français 🇫🇷"),
+        Language(5, "de", "Deutsch 🇩🇪"),
+        Language(6, "ar", "العربية 🇸🇦"),
+        Language(7, "zh", "中文 🇨🇳"),
+        Language(8, "hi", "हिन्दी 🇮🇳")
+    )
+    /*
     val languageNames = mapOf(
         "tr" to "Türkçe 🇹🇷",
         "en" to "English 🇺🇸",
@@ -29,20 +40,20 @@ fun LanguagePicker(currentLang: String, onLangSelected: (String) -> Unit) {
         "ar" to "العربية 🇸🇦",
         "zh" to "中文 🇨🇳",
         "hi" to "हिन्दी 🇮🇳"
-    )
+    )*/
 
     Box(modifier = Modifier.padding(16.dp)) {
         TextButton(onClick = { expanded = true }) {
-            Text(languageNames[currentLang] ?: "🌐 Language")
+            Text(languageList.first { it.id == currentLangId }.name)
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            languages.keys.forEach { langCode ->
+            languages.keys.forEach { langId ->
                 DropdownMenuItem(
                     text = {
-                        Text(text = languageNames[langCode] ?: langCode.uppercase())
+                        Text(text = languageList.first { it.id == langId }.name)
                     },
                     onClick = {
-                        onLangSelected(langCode)
+                        onLangSelected(langId)
                         expanded = false
                     }
                 )

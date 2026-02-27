@@ -28,7 +28,7 @@ fun MealDetailScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Text("Malzemeler:", style = MaterialTheme.typography.titleMedium)
-                detail.ingredients.forEach {
+                detail.materials.forEach {
                     Text("• $it")
                 }
 

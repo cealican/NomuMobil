@@ -3,7 +3,7 @@ package alican.app.nomu.util
 data class AppStrings(
     val title: String,
     val categoryLabel: String,
-    val ingredientsLabel: String,
+    val materialsLabel: String,
     val locationLabel: String,
     val findButton: String,
     val loading: String,
@@ -11,39 +11,50 @@ data class AppStrings(
     val protein: String,
     val carbs: String
 )
+
+/*
+    Language(1, "tr", "Türkçe 🇹🇷"),
+    Language(2, "en", "English 🇺🇸"),
+    Language(3, "es", "Español 🇪🇸"),
+    Language(4, "fr", "Français 🇫🇷"),
+    Language(5, "de", "Deutsch 🇩🇪"),
+    Language(6, "ar", "العربية 🇸🇦"),
+    Language(7, "zh", "中文 🇨🇳"),
+    Language(8, "hi", "हिन्दी 🇮🇳")
+*/
 val languages = mapOf(
-    "tr" to AppStrings(
+    1 to AppStrings(
         "Nomu", "Kategori Seç","Dolabında ne var?", "Hangi bölgenin yiyeceği olsun?", "Tarif Bul",
         "Nomu Şefi düşünüyor...", "Kalori", "Protein", "Karbonh."
     ),
-    "en" to AppStrings(
+    2 to AppStrings(
         "Nomu", "Kategori Seç", "What's in your fridge?", "Hangi bölgenin yiyeceği olsun?", "Find Recipes",
         "Nomu Chef is thinking...", "Calories", "Protein", "Carbs"
     ),
-    "es" to AppStrings(
+    3 to AppStrings(
         "Nomu", "Kategori Seç", "¿Qué hay en tu nevera?", "Hangi bölgenin yiyeceği olsun?", "Buscar Recetas",
         "El chef Nomu está pensando...", "Calorías", "Proteína", "Carbohidratos"
     ),
-    "fr" to AppStrings(
+    4 to AppStrings(
         "Nomu", "Kategori Seç", "Qu'y a-t-il dans votre frigo ?", "Hangi bölgenin yiyeceği olsun?", "Trouver des Recettes",
         "Le chef Nomu réfléchit...", "Calories", "Protéines", "Glucides"
     ),
-    "de" to AppStrings(
+    5 to AppStrings(
         "Nomu", "Kategori Seç", "Was ist in deinem Kühlschrank?", "Hangi bölgenin yiyeceği olsun?", "Rezepte finden",
         "Nomu Chef denkt nach...", "Kalorien", "Eiweiß", "Kohlenhydrate"
     ),
-    "ar" to AppStrings(
+    6 to AppStrings(
         "نومو", "Kategori Seç", "ماذا يوجد في ثلاجتك؟", "Hangi bölgenin yiyeceği olsun?", "ابحث عن وصفات",
         "الشيف نومو يفكر...", "سعرات", "بروتين", "كربوهيدرات"
     ),
-    "zh" to AppStrings(
+    7 to AppStrings(
         "Nomu", "Kategori Seç", "你的冰箱里有什么？", "Hangi bölgenin yiyeceği olsun?", "查找食谱",
         "Nomu厨师正在思考...", "卡路里", "蛋白质", "碳水化合物"
     ),
-    "hi" to AppStrings(
+    8 to AppStrings(
         "Nomu", "Kategori Seç", "आपके फ्रिज में क्या है?", "Hangi bölgenin yiyeceği olsun?", "व्यंजन खोजें",
         "Nomu शेफ सोच रहा है...", "कैलोरी", "प्रोटीन", "कार्ब्स"
     )
 )
 
-fun getStrings(lang: String): AppStrings = languages[lang] ?: languages["en"]!!
+fun getStrings(langId: Int): AppStrings = languages[langId] ?: languages[2]!!

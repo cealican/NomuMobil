@@ -61,6 +61,6 @@ data class RecipeSummary(
 @Serializable
 data class RecipeDetail(
     val name: String,
-    val ingredients: List<String>,
+    val materials: List<String>,
     val steps: List<String>
 )

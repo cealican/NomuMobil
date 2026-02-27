@@ -1,6 +1,5 @@
 package alican.app.nomu.ui.Component
 
-import alican.app.nomu.data.model.Category
 import alican.app.nomu.util.NomuColor.Companion.NomuBackground
 import alican.app.nomu.util.NomuColor.Companion.NomuPurple
 import androidx.compose.foundation.background
@@ -26,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryDropdown(
@@ -81,3 +80,4 @@ fun CategoryDropdown(
         }
     }
 }
+*/

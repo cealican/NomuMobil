@@ -1,14 +1,8 @@
 package alican.app.nomu.util
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-
 val isMock = true
 var token = "bismillah"
-var selectedLanguage: String = SettingsManager().getLanguage()
+var selectedLanguageId: Int = SettingsManager().getLanguage()
     get() {
         field = SettingsManager().getLanguage()
         return field
@@ -16,6 +10,15 @@ var selectedLanguage: String = SettingsManager().getLanguage()
     set(value) {
         field = value
     }
+/*
+var selectedLanguage: String = SettingsManager().getLanguage()
+    get() {
+        field = SettingsManager().getLanguage()
+        return field
+    }
+    set(value) {
+        field = value
+    }*/
 
 //val appStrings: AppStrings = getStrings(selectedLanguage)
 
@@ -34,7 +37,7 @@ id INT AUTO_INCREMENT PRIMARY KEY,
 
 -- Normalize edilmiş ve İngilizceye çevrilmiş malzeme listesi (Cache Anahtarı)
 -- Örn: "eggplant,onion,tomato" (Alfabetik ve virgülle ayrılmış)
-ingredients_hash VARCHAR(500) NOT NULL,
+materials_hash VARCHAR(500) NOT NULL,
 
 -- Lokasyon bilgisi
 location VARCHAR(100) DEFAULT 'Global',
@@ -52,7 +55,7 @@ updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
 -- Performans için indeksler
 -- Aynı malzemeler ve lokasyon ile yapılan aramaları çok hızlı bulmak için
-INDEX idx_search (ingredients_hash(255), location, response_lang)
+INDEX idx_search (materials_hash(255), location, response_lang)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 3. Opsiyonel: Log tablosu (Hataları ve kullanım istatistiklerini izlemek için)

@@ -42,13 +42,13 @@ suspend fun getMockRecipeDetail(recipeName: String, lang: String): RecipeDetail 
     return if (lang == "en") {
         RecipeDetail(
             name = recipeName,
-            ingredients = listOf("2 pcs Eggplant", "200g Minced Meat", "1 Onion", "2 Tomatoes"),
+            materials = listOf("2 pcs Eggplant", "200g Minced Meat", "1 Onion", "2 Tomatoes"),
             steps = listOf("Slice the eggplants", "Fry the meat with onions", "Fill the eggplants", "Bake for 20 mins")
         )
     } else {
         RecipeDetail(
             name = recipeName,
-            ingredients = listOf("2 adet patlıcan", "200g Kıyma", "1 Soğan", "2 Domates"),
+            materials = listOf("2 adet patlıcan", "200g Kıyma", "1 Soğan", "2 Domates"),
             steps = listOf("Patlıcanları dilimleyin", "eti soğanla birlikte kavurun", "patlıcanların içini doldurun", "20 dakika pişirin")
         )
     }

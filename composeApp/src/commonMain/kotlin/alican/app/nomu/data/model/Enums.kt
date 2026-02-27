@@ -1,8 +1,5 @@
 package alican.app.nomu.data.model
 
-import kotlinx.serialization.SerialName
-
-
 object Enums {
     enum class OperationStatus(val kod: Int) {
         Info(1),
@@ -57,7 +54,7 @@ object Enums {
     enum class ResultCodes {
         OK, YES, NO;
     }
-
+/*
 // Örnek olması için bırakıldı
     enum class InterviewStatus(private val stringValue: String, private val intValue: Int) {
         @SerialName("0")
@@ -86,5 +83,5 @@ object Enums {
                 return al
             }
         }
-    }
+    }*/
 }

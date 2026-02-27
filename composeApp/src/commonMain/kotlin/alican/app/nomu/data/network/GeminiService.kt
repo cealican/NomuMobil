@@ -1,5 +1,5 @@
 package alican.app.nomu.data.network
-
+/*
 import alican.app.nomu.data.model.Content
 import alican.app.nomu.data.model.GeminiRequest
 import alican.app.nomu.data.model.GeminiResponse
@@ -18,7 +18,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-/*
+
 class GeminiService {
     private val apiKey = "AIzaSyAFgIa0OivQYAQam1Lw8UxD2vPM02I_cwU"
 
@@ -54,7 +54,7 @@ class GeminiService {
         }
     }
 
-    suspend fun getRecipes(ingredients: String, location: String, lang: String): RecipeRecommendation {
+    suspend fun getRecipes(materials: String, location: String, lang: String): RecipeRecommendation {
         val targetLang = when(lang) {
             "tr" -> "Turkish"
             "es" -> "Spanish"
@@ -73,7 +73,7 @@ class GeminiService {
             Girdiler başka dilde olsa bile sen sadece $targetLang dilinde sonuç üreteceksin.
             
             GÖREV: Aşağıdaki malzemelere ve konuma göre 3 popüler yemek önerisi yap.
-            MALZEMELER: $ingredients
+            MALZEMELER: $materials
             KONUM: $location
             
             ÇIKTI FORMATI: Sadece ham JSON objesi döndür. Markdown (```json) kullanma. Başka açıklama ekleme.
@@ -122,7 +122,7 @@ class GeminiService {
             KESİN KURAL: Tüm yanıt içeriği KESİNSİZ OLARAK $targetLang dilinde olmalıdır. 
             Girdiler başka dilde olsa bile sen sadece $targetLang dilinde sonuç üreteceksin.
             
-            GÖREV: $location konumuna ait $recipeName yemeği için tarifi şu JSON formatında ver: {\"name\": \"$recipeName\", \"ingredients\": [\"madde1\"], \"steps\": [\"adım1\"]}
+            GÖREV: $location konumuna ait $recipeName yemeği için tarifi şu JSON formatında ver: {\"name\": \"$recipeName\", \"materials\": [\"madde1\"], \"steps\": [\"adım1\"]}
             
             ÇIKTI FORMATI: Sadece ham JSON objesi döndür. Markdown (```json) kullanma. Başka açıklama ekleme.
             
