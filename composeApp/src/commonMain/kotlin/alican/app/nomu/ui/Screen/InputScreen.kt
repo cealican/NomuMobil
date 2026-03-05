@@ -69,7 +69,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun InputScreen(
     viewModel: HomeViewModel,
-    onSearchTriggered: (materials: List<String>, location: String, category: String) -> Unit
+    onSearchTriggered: (materials: List<String>, zone: String, category: String) -> Unit
 ) {
     val settingsManager = remember { SettingsManager() }
     var currentLang by remember { mutableStateOf(settingsManager.getLanguage()) }
@@ -94,7 +94,7 @@ fun InputScreen(
             LanguagePicker(selectedLanguageId) { newLang ->
                 currentLang = newLang
                 settingsManager.setLanguage(newLang)
-                viewModel.getAllMaterialsWithCategory(selectedLanguageId)
+                viewModel.getAllMaterialsWithCategory()
                 viewModel.clearMateriallist()
             }
         }
@@ -109,12 +109,17 @@ fun InputScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         AutocompleteField(
-            label = strings.locationLabel,
-            value = viewModel.selectedLocation,
-            suggestions = viewModel.locationSuggestions,
+            label = strings.zoneLabel,
+            value = viewModel.typedZone,
+            suggestions = viewModel.zoneSuggestions.map { it.name },
             leadingIcon = Icons.Default.LocationOn,
-            onValueChange = { viewModel.onLocationChange(it) },
-            onSuggestionSelected = { viewModel.selectedLocation = it }
+            onValueChange = { zoneName ->
+                viewModel.selectedZone = viewModel.zoneSuggestions.find { it.name == zoneName }
+                viewModel.onZoneChange(zoneName) },
+            onSuggestionSelected = { zoneName ->
+                viewModel.typedZone = zoneName
+                viewModel.selectedZone = viewModel.zoneSuggestions.find { it.name == zoneName }
+            }
         )
 
         // Malzeme seç butonu

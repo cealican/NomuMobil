@@ -24,8 +24,8 @@ fun App() {
                 Screen.Input -> {
                     InputScreen(
                         viewModel = viewModel,
-                        onSearchTriggered = { materials, location, category ->
-                            println("Arama Başladı: $materials, $location, $category")
+                        onSearchTriggered = { materials, zone, category ->
+                            println("Arama Başladı: $materials, $zone, $category")
                             // TODO arama işlemleri
                         }
                     )

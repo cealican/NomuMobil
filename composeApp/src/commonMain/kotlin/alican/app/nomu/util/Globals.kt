@@ -2,6 +2,7 @@ package alican.app.nomu.util
 
 val isMock = true
 var token = "bismillah"
+
 var selectedLanguageId: Int = SettingsManager().getLanguage()
     get() {
         field = SettingsManager().getLanguage()

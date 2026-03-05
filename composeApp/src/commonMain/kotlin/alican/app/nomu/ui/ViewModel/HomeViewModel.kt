@@ -2,6 +2,7 @@ package alican.app.nomu.ui.ViewModel
 
 import alican.app.nomu.data.model.Material
 import alican.app.nomu.data.model.MaterialCategory
+import alican.app.nomu.data.model.Zone
 import alican.app.nomu.data.network.Service
 import alican.app.nomu.util.SettingsManager
 import androidx.compose.runtime.getValue
@@ -16,11 +17,12 @@ class HomeViewModel(private val service: Service) : ViewModel() {
 
     var categoriesWithMaterials by mutableStateOf<List<MaterialCategory>>(emptyList())
 
-    var locationSuggestions by mutableStateOf<List<String>>(emptyList())
+    var zoneSuggestions by mutableStateOf<List<Zone>>(emptyList())
     var materialSuggestions by mutableStateOf<List<String>>(emptyList())
 
     // Kullanıcı Seçimleri
-    var selectedLocation by mutableStateOf("")
+    var selectedZone by mutableStateOf<Zone?>(null)
+    var typedZone by mutableStateOf("")
     //val selectedMaterials = mutableStateListOf<String>()
     var selectedMaterials by mutableStateOf<MutableList<Material>>(mutableStateListOf())
         //private set
@@ -34,14 +36,16 @@ class HomeViewModel(private val service: Service) : ViewModel() {
     }
 
     init {
-        getAllMaterialsWithCategory(SettingsManager().getLanguage())
+        getAllMaterialsWithCategory()
     }
 
-    fun onLocationChange(query: String) {
-        selectedLocation = query
-        if (query.length >= 3) {
-            viewModelScope.launch {
-                locationSuggestions = service.fetchLocationSuggestions(query)
+    fun onZoneChange(query: String) {
+        typedZone = query
+        if (zoneSuggestions.firstOrNull{it.name == query} == null) {
+            if (query.length >= 2) {
+                viewModelScope.launch {
+                    zoneSuggestions = service.fetchZones(query)
+                }
             }
         }
     }
@@ -70,10 +74,10 @@ class HomeViewModel(private val service: Service) : ViewModel() {
         categoriesWithMaterials = emptyList()
     }
 
-    fun getAllMaterialsWithCategory(langId: Int) {
+    fun getAllMaterialsWithCategory() {
 
         viewModelScope.launch {
-            service.fetchMaterialsWithCategories(langId)?.let { categoriesWithMaterials = it }
+            service.fetchMaterialsWithCategories()?.let { categoriesWithMaterials = it }
         }
     }
 }

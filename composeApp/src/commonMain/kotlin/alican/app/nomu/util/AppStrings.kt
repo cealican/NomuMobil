@@ -4,7 +4,7 @@ data class AppStrings(
     val title: String,
     val categoryLabel: String,
     val materialsLabel: String,
-    val locationLabel: String,
+    val zoneLabel: String,
     val findButton: String,
     val loading: String,
     val calories: String,
@@ -22,6 +22,7 @@ data class AppStrings(
     Language(7, "zh", "中文 🇨🇳"),
     Language(8, "hi", "हिन्दी 🇮🇳")
 */
+
 val languages = mapOf(
     1 to AppStrings(
         "Nomu", "Kategori Seç","Dolabında ne var?", "Hangi bölgenin yiyeceği olsun?", "Tarif Bul",

@@ -2,6 +2,8 @@ package alican.app.nomu.data.network
 
 import alican.app.nomu.data.model.Enums
 import alican.app.nomu.data.model.MaterialCategory
+import alican.app.nomu.data.model.Zone
+import alican.app.nomu.util.selectedLanguageId
 import alican.app.nomu.util.token
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -12,9 +14,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.isSuccess
+import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.errors.IOException
 import kotlinx.serialization.json.Json
@@ -26,6 +26,7 @@ class Service {
         companion object {
             val baseUrl = "https://elimdengelir.net/nomu/"
             val getMaterialsWithCategoryUrl = baseUrl + "api/getAllMaterials.php"
+            val getZonesUrl = baseUrl + "api/getZones.php"
         }
     }
 
@@ -78,10 +79,10 @@ class Service {
         return serviceResult
     }
 
-    suspend fun fetchMaterialsWithCategories(langId: Int): List<MaterialCategory>? {
+    suspend fun fetchMaterialsWithCategories(): List<MaterialCategory>? {
         val headers:  Map<String, String> = mapOf(
             "token" to token,
-            "langId" to langId.toString()
+            "langId" to selectedLanguageId.toString()
         )
 
         val response: ServiceResult = makeGetServiceCall(headers, Url.getMaterialsWithCategoryUrl)
@@ -99,9 +100,31 @@ class Service {
         return categoryList
     }
 
-    fun fetchLocationSuggestions(query: String): List<String> {
-        // TODO("Not yet implemented")
-        return listOf("aaa2", "bbb2", "ccc2")
+    suspend fun fetchZones(searchText: String = ""): List<Zone> {
+        val headers:  Map<String, String> = mapOf(
+            "token" to token,
+            "langId" to selectedLanguageId.toString()
+        )
+
+        val url = if (searchText.isNotBlank()) {
+            "${Url.getZonesUrl}?searchText=${searchText.encodeURLParameter()}"
+        } else {
+            Url.getZonesUrl
+        }
+
+        val response: ServiceResult = makeGetServiceCall(headers, url)
+
+        var zoneList: List<Zone>? = null
+        try {
+            val json = Json{}
+            zoneList = response.data?.let {
+                json.decodeFromJsonElement<List<Zone>>(it)
+            }
+        } catch (e: Exception) {
+            println("JSON Parse Hatası: ${e.message}")
+        }
+
+        return zoneList ?: emptyList()
     }
 
 /*
